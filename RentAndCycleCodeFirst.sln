@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29123.88
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RentAndCycleCodeFirst", "RentAndCycleCodeFirst.csproj", "{B2B44265-FAB2-4A63-BD15-883B8937D883}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B2B44265-FAB2-4A63-BD15-883B8937D883}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B2B44265-FAB2-4A63-BD15-883B8937D883}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B2B44265-FAB2-4A63-BD15-883B8937D883}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B2B44265-FAB2-4A63-BD15-883B8937D883}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {905621E7-DA02-45D3-9A9E-01E04384EA5E}
+	EndGlobalSection
+EndGlobal
