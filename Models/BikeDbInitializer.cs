@@ -46,6 +46,8 @@ namespace RentAndCycleCodeFirst.Models
             companyBikes.ForEach(b => {
                 Bike bike = context.Bikes.Find(b.BikeId);
                 b.Bike = bike;
+                CompanyLocation companyLocation = context.CompanyLocations.Find(b.CompanyLocationId);
+                b.CompanyLocation = companyLocation;
                 context.CompanyBikes.Add(b);
             });
             context.SaveChanges();
