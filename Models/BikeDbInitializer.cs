@@ -22,6 +22,33 @@ namespace RentAndCycleCodeFirst.Models
             var companies = ReadCsv<Company>(resourceName);
             companies.ForEach(c => context.Companies.Add(c));
             context.SaveChanges();
+
+            resourceName = "RentAndCycleCodeFirst.Models.SeedData.Bike.csv";
+            var bikes = ReadCsv<Bike>(resourceName);
+            bikes.ForEach(b => {
+                Brand brand = context.Brands.Find(b.BrandId);
+                b.Brand = brand;
+                context.Bikes.Add(b);
+            });
+            context.SaveChanges();
+
+            resourceName = "RentAndCycleCodeFirst.Models.SeedData.CompanyLocation.csv";
+            var companyLocations = ReadCsv<CompanyLocation>(resourceName);
+            companyLocations.ForEach(c => {
+                Company company = context.Companies.Find(c.CompanyId);
+                c.Company = company;
+                context.CompanyLocations.Add(c);
+            });
+            context.SaveChanges();
+
+            resourceName = "RentAndCycleCodeFirst.Models.SeedData.CompanyBike.csv";
+            var companyBikes = ReadCsv<CompanyBike>(resourceName);
+            companyBikes.ForEach(b => {
+                Bike bike = context.Bikes.Find(b.BikeId);
+                b.Bike = bike;
+                context.CompanyBikes.Add(b);
+            });
+            context.SaveChanges();
         }
 
         private List<T> ReadCsv<T>(string resourceName)
