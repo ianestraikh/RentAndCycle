@@ -1,4 +1,6 @@
-﻿using System;
+﻿using RentAndCycleCodeFirst.Models;
+using RentAndCycleCodeFirst.Utils;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -22,7 +24,34 @@ namespace RentAndCycleCodeFirst.Controllers
 
         public ActionResult Contact()
         {
-            ViewBag.Message = "Your contact page.";
+            return View(new SendEmailViewModel());
+        }
+
+        [HttpPost]
+        public ActionResult Contact(SendEmailViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    string fromEmail = model.FromEmail;
+                    string subject = model.Subject;
+                    string contents = model.Contents;
+
+                    EmailSender es = new EmailSender();
+                    es.Send(fromEmail, subject, contents);
+
+                    ViewBag.Result = "Email has been send.";
+
+                    ModelState.Clear();
+
+                    return View(new SendEmailViewModel());
+                }
+                catch
+                {
+                    return View();
+                }
+            }
 
             return View();
         }

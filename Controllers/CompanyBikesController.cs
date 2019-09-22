@@ -37,6 +37,7 @@ namespace RentAndCycleCodeFirst.Controllers
         }
 
         // GET: CompanyBikes/Create
+        [Authorize(Roles = "Admin")]
         public ActionResult Create()
         {
             ViewBag.BikeId = new SelectList(db.Bikes, "Id", "Model");
@@ -64,6 +65,7 @@ namespace RentAndCycleCodeFirst.Controllers
         }
 
         // GET: CompanyBikes/Edit/5
+        [Authorize(Roles = "Admin")]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -99,6 +101,7 @@ namespace RentAndCycleCodeFirst.Controllers
         }
 
         // GET: CompanyBikes/Delete/5
+        [Authorize(Roles = "Admin")]
         public ActionResult Delete(int? id)
         {
             if (id == null)
