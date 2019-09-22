@@ -27,7 +27,7 @@ namespace RentAndCycleCodeFirst.Migrations
                 manager.Create(role);
             }
 
-            if (!context.Users.Any(u => u.UserName == "founder"))
+            if (!context.Users.Any(u => u.UserName == "admin@admin.com"))
             {
                 var store = new UserStore<ApplicationUser>(context);
                 var manager = new UserManager<ApplicationUser>(store);
