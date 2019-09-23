@@ -213,6 +213,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BrandsController.cs" />
     <Compile Include="Controllers\CompanyBikesController.cs" />
+    <Compile Include="Controllers\CompanyLocationsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Migrations\Configuration.cs" />
@@ -542,6 +543,11 @@
     <Content Include="Views\CompanyBikes\Details.cshtml" />
     <Content Include="Views\CompanyBikes\Edit.cshtml" />
     <Content Include="Views\CompanyBikes\Index.cshtml" />
+    <Content Include="Views\CompanyLocations\Create.cshtml" />
+    <Content Include="Views\CompanyLocations\Delete.cshtml" />
+    <Content Include="Views\CompanyLocations\Details.cshtml" />
+    <Content Include="Views\CompanyLocations\Edit.cshtml" />
+    <Content Include="Views\CompanyLocations\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
