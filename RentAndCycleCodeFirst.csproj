@@ -211,7 +211,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
-    <Compile Include="Controllers\BrandsController.cs" />
+    <Compile Include="Controllers\BulkEmailController.cs" />
     <Compile Include="Controllers\CompanyBikesController.cs" />
     <Compile Include="Controllers\CompanyLocationsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -226,6 +226,7 @@
     <Compile Include="Models\BikeDbInitializer.cs" />
     <Compile Include="Models\Booking.cs" />
     <Compile Include="Models\Brand.cs" />
+    <Compile Include="Models\BulkEmailViewModel.cs" />
     <Compile Include="Models\Company.cs" />
     <Compile Include="Models\CompanyBike.cs" />
     <Compile Include="Models\CompanyLocation.cs" />
@@ -548,6 +549,7 @@
     <Content Include="Views\CompanyLocations\Details.cshtml" />
     <Content Include="Views\CompanyLocations\Edit.cshtml" />
     <Content Include="Views\CompanyLocations\Index.cshtml" />
+    <Content Include="Views\BulkEmail\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
