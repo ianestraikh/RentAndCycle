@@ -19,5 +19,10 @@ namespace RentAndCycleCodeFirst.Models
 
         [Required(ErrorMessage = "Please enter the contents")]
         public string Contents { get; set; }
+
+        //https://stackoverflow.com/a/7163720/7587466
+        [Required, Microsoft.Web.Mvc.FileExtensions(Extensions = "pdf",
+             ErrorMessage = "Specify a PDF file.")]
+        public HttpPostedFileBase File { get; set; }
     }
 }

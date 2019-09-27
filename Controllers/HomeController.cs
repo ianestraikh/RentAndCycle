@@ -39,7 +39,8 @@ namespace RentAndCycleCodeFirst.Controllers
                     string contents = model.Contents;
 
                     EmailSender es = new EmailSender();
-                    es.Send(fromEmail, subject, contents);
+                    var toAdminEmail = "iest0002@student.monash.edu";
+                    es.Send(fromEmail, new List<string> { toAdminEmail}, subject, contents);
 
                     ViewBag.Result = "Email has been send.";
 

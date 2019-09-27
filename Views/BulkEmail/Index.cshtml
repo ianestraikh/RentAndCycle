@@ -7,10 +7,10 @@
 
 <h2>Bulk Email</h2>
 <hr />
-@using (Html.BeginForm())
+@using (Html.BeginForm("Index", "BulkEmail", FormMethod.Post, new 
+                                       { enctype = "multipart/form-data" }))
 {
     <h4>Select emails</h4>
-    @Html.ValidationMessageFor(model => model.ToEmails, "", new { @class = "text-danger" })
     <table class="table">
         <thead>
             <tr>
@@ -19,6 +19,7 @@
             </tr>
         </thead>
     </table>
+    @Html.ValidationMessageFor(model => model.ToEmails, "", new { @class = "text-danger" })
     <br />
 
     @Html.HiddenFor(model => model.ToEmails);
@@ -46,6 +47,13 @@
             <div class="col-md-10">
                 @Html.TextAreaFor(model => model.Contents, new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.Contents, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                @Html.TextBoxFor(model => model.File, new { type = "file" })
+                @Html.ValidationMessageFor(model => model.File, "", new { @class = "text-danger" })
             </div>
         </div>
 

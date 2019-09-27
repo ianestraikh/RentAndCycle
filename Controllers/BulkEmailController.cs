@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Web;
@@ -51,21 +52,24 @@ namespace RentAndCycleCodeFirst.Controllers
             {
                 try
                 {
-                    string toEmails = model.ToEmails;
+                    string emails = model.ToEmails;
                     string subject = model.Subject;
                     string contents = model.Contents;
 
-                    EmailSender es = new EmailSender();
-                    //es.Send(fromEmail, subject, contents);
-                    foreach (string email in toEmails.Split(';'))
+                    var toEmails = new List<string>();
+                    foreach (string email in emails.Split(';'))
                     {
-                        ViewBag.Result = "Email has been send." + email;
+                        toEmails.Add(email);
                     }
-                    //ViewBag.Result = "Email has been send.";
 
-                    //ModelState.Clear();
+                    EmailSender es = new EmailSender();
+                    es.Send("admin@rentandcycle.com", toEmails, subject, contents, model.File.InputStream);
 
-                    return View();
+                    ViewBag.Result = "Email has been send.";
+
+                    ModelState.Clear();
+
+                    return View(new BulkEmailViewModel());
                 }
                 catch
                 {
