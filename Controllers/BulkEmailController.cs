@@ -13,6 +13,7 @@ using RentAndCycleCodeFirst.Utils;
 
 namespace RentAndCycleCodeFirst.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class BulkEmailController : Controller
     {
         public ActionResult GetEmails()
