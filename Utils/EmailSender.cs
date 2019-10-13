@@ -10,7 +10,7 @@ namespace RentAndCycleCodeFirst.Utils
 {
     public class EmailSender
     {
-        public void Send(string fromEmail, List<string> toEmails, string subject, string contents, Stream file = null)
+        public async System.Threading.Tasks.Task SendAsync(string fromEmail, List<string> toEmails, string subject, string contents, Stream file = null)
         {
             var client = new SendGridClient(Environment.GetEnvironmentVariable("SENDGRID_API", EnvironmentVariableTarget.User));
             var from = new EmailAddress(fromEmail, "Rent And Cycle");
@@ -21,7 +21,7 @@ namespace RentAndCycleCodeFirst.Utils
             var msg = MailHelper.CreateSingleEmailToMultipleRecipients(from, to, subject, plainTextContent, htmlContent, showAllRecipients);
             if (file != null)
             {
-                msg.AddAttachmentAsync("attachment.pdf", file);
+                await msg.AddAttachmentAsync("attachment.pdf", file);
             }
             _ = client.SendEmailAsync(msg);
         }

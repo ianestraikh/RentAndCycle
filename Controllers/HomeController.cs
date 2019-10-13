@@ -40,7 +40,7 @@ namespace RentAndCycleCodeFirst.Controllers
 
                     EmailSender es = new EmailSender();
                     var toAdminEmail = "iest0002@student.monash.edu";
-                    es.Send(fromEmail, new List<string> { toAdminEmail}, subject, contents);
+                    es.SendAsync(fromEmail, new List<string> { toAdminEmail}, subject, contents);
 
                     ViewBag.Result = "Email has been send.";
 

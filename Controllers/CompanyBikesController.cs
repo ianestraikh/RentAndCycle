@@ -15,9 +15,25 @@ namespace RentAndCycleCodeFirst.Controllers
         private BikeDbContext db = new BikeDbContext();
 
         // GET: CompanyBikes
-        public ActionResult Index()
+        //public ActionResult Index()
+        //{
+        //    var companyBikes = db.CompanyBikes.Include(c => c.Bike).Include(c => c.CompanyLocation);
+        //    return View(companyBikes.ToList());
+        //}
+
+        // GET: CompanyBikes by CompanyLocationId
+        public ActionResult Index(int? id)
         {
             var companyBikes = db.CompanyBikes.Include(c => c.Bike).Include(c => c.CompanyLocation);
+            if (id != null)
+            {
+                companyBikes = companyBikes.Where(c => c.CompanyLocationId == id);
+                if (companyBikes.Count() == 0)
+                {
+                    return HttpNotFound();
+                }
+                return View(companyBikes.ToList());
+            }
             return View(companyBikes.ToList());
         }
 

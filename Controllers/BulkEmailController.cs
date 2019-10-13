@@ -64,21 +64,29 @@ namespace RentAndCycleCodeFirst.Controllers
                     }
 
                     EmailSender es = new EmailSender();
-                    es.Send("admin@rentandcycle.com", toEmails, subject, contents, model.File.InputStream);
-
-                    ViewBag.Result = "Email has been send.";
+                    if (model.File != null)
+                    {
+                        _ = es.SendAsync("admin@rentandcycle.com", toEmails, subject, contents, model.File.InputStream);
+                    } else
+                    {
+                        _ = es.SendAsync("admin@rentandcycle.com", toEmails, subject, contents);
+                    }
 
                     ModelState.Clear();
 
-                    return View(new BulkEmailViewModel());
+                    //ViewBag.Result = "Email has been send.";
+
+                    TempData["message"] = "Email has been send.";
+
+                    return RedirectToAction("Index");
                 }
                 catch
                 {
-                    return View();
+                    return View(model);
                 }
             }
 
-            return View();
+            return View(model);
         }
     }
 }

@@ -7,8 +7,8 @@
 
 <h2>Bulk Email</h2>
 <hr />
-@using (Html.BeginForm("Index", "BulkEmail", FormMethod.Post, new 
-                                       { enctype = "multipart/form-data" }))
+@using (Html.BeginForm("Index", "BulkEmail", FormMethod.Post, new
+{ enctype = "multipart/form-data" }))
 {
     <h4>Select emails</h4>
     <table class="table">
@@ -26,9 +26,9 @@
     @Html.HiddenFor(model => model.SelectedRows);
 
     @Html.AntiForgeryToken()
-    if (@ViewBag.Result != null)
+    if (@TempData["message"] != null)
     {
-        <div class="alert alert-info">@ViewBag.Result</div>
+        <div class="alert alert-info">@TempData["message"]</div>
     }
 
     <div class="form-horizontal">
@@ -36,16 +36,17 @@
 
         <div class="form-group">
             @Html.LabelFor(model => model.Subject, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Subject, new { htmlAttributes = new { @class = "form-control" } })
+            <div class="col-md-4">
+                @Html.EditorFor(model => model.Subject, new { htmlAttributes = new { @class = "form-control", @autocomplete="off", @style = "max-width: 100% !important" } })
                 @Html.ValidationMessageFor(model => model.Subject, "", new { @class = "text-danger" })
             </div>
         </div>
 
         <div class="form-group">
             @Html.LabelFor(model => model.Contents, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.TextAreaFor(model => model.Contents, new { @class = "form-control" })
+            <div class="col-md-4">
+                @Html.HiddenFor(model => model.Contents)
+                <div id="editor-container" , style="height:100px"></div>
                 @Html.ValidationMessageFor(model => model.Contents, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -53,7 +54,7 @@
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 @Html.TextBoxFor(model => model.File, new { type = "file" })
-                @Html.ValidationMessageFor(model => model.File, "", new { @class = "text-danger" })
+                @*@Html.ValidationMessageFor(model => model.File, "", new { @class = "text-danger" })*@
             </div>
         </div>
 
@@ -70,7 +71,7 @@
     @Scripts.Render("~/Scripts/DataTables/dataTables.bootstrap.js")
     @Scripts.Render("~/Scripts/DataTables/dataTables.select.min.js")
     @Scripts.Render("~/Scripts/DataTables/dataTables.buttons.min.js")
-
+    @Scripts.Render("https://cdn.quilljs.com/1.0.0/quill.js")
     <script>
         $(document).ready(function () {
             var table = $('.table').DataTable({
@@ -128,10 +129,30 @@
                 $('#ToEmails').attr('value', emails)
             })
         });
+
+        // https://quilljs.com/playground/#form-submit
+        var quill = new Quill('#editor-container', {
+            modules: {
+                toolbar: [
+                    ['bold', 'italic'],
+                    ['link', 'blockquote', 'code-block'],
+                    [{ list: 'ordered' }, { list: 'bullet' }]
+                ]
+            },
+            theme: 'snow'
+        });
+
+        // copy text from editor-container to contents textarea
+        $("body").on('DOMSubtreeModified', "#editor-container", function () {
+            $('#Contents').attr('value', quill.root.innerHTML)
+        });
     </script>
 }
 <link href="~/Content/DataTables/css/dataTables.bootstrap.min.css" rel="stylesheet" />
 <link href="~/Content/DataTables/css/select.dataTables.min.css" rel="stylesheet" />
 <link href="~/Content/DataTables/css/buttons.dataTables.min.css" rel="stylesheet" />
+
+<!-- Include Quill stylesheet -->
+<link href="https://cdn.quilljs.com/1.0.0/quill.snow.css" rel="stylesheet">
 
 
