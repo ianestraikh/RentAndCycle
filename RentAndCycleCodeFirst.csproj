@@ -233,6 +233,7 @@
     <Compile Include="Models\BulkEmailViewModel.cs" />
     <Compile Include="Models\Company.cs" />
     <Compile Include="Models\CompanyBike.cs" />
+    <Compile Include="Models\CompanyBikeViewModel.cs" />
     <Compile Include="Models\CompanyLocation.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />

@@ -1,4 +1,4 @@
-﻿@model IEnumerable<RentAndCycleCodeFirst.Models.CompanyBike>
+﻿@model RentAndCycleCodeFirst.Models.CompanyBikeViewModel
 
 @{
     ViewBag.Title = "Bikes";
@@ -13,64 +13,127 @@
         @Html.ActionLink("Create New", "Create")
     }
 </p>
-<p>From: <input type="text" id="datepickerFrom"></p>
-<p>To:   <input type="text" id="datepickerTo"></p>
+@using (Html.BeginForm("Index", "CompanyBikes", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Bike.Brand)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Bike.Model)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CompanyLocation.Company)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Price)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            if (item.Count > 0)
+    for (int i = 0; i < Model.CompanyBikes.Count; i++)
+    {
+        @Html.HiddenFor(m => Model.CompanyBikes[i].Id)
+
+        @Html.HiddenFor(m => Model.CompanyBikes[i].BikeId)
+        @Html.HiddenFor(m => Model.CompanyBikes[i].Bike.Id)
+        @Html.HiddenFor(m => Model.CompanyBikes[i].Bike.BikeModel)
+        @Html.HiddenFor(m => Model.CompanyBikes[i].Bike.BrandId)
+        @Html.HiddenFor(m => Model.CompanyBikes[i].Bike.Brand.Name)
+
+        @Html.HiddenFor(m => Model.CompanyBikes[i].CompanyLocationId)
+        @Html.HiddenFor(m => Model.CompanyBikes[i].CompanyLocation.Id)
+        @Html.HiddenFor(m => Model.CompanyBikes[i].CompanyLocation.CompanyId)
+        @Html.HiddenFor(m => Model.CompanyBikes[i].CompanyLocation.Lat)
+        @Html.HiddenFor(m => Model.CompanyBikes[i].CompanyLocation.Lon)
+
+        @Html.HiddenFor(m => Model.CompanyBikes[i].CompanyLocation.Company.Id)
+        @Html.HiddenFor(m => Model.CompanyBikes[i].CompanyLocation.Company.Name)
+        @Html.HiddenFor(m => Model.CompanyBikes[i].CompanyLocation.Company.Desc)
+
+        @Html.HiddenFor(m => Model.CompanyBikes[i].Price)
+        @Html.HiddenFor(m => Model.CompanyBikes[i].Count)
+    }
+
+    <div class="form-horizontal">
+        <div class="form-group">
+            @Html.LabelFor(model => model.StartDate, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-3">
+                @Html.EditorFor(model => model.StartDate, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.StartDate, "", new { @class = "text-danger" })
+            </div>
+
+            @Html.LabelFor(model => model.EndDate, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-3">
+                @Html.EditorFor(model => model.EndDate, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.EndDate, "", new { @class = "text-danger" })
+            </div>
+
+            @if (!Model.IsValid)
             {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Bike.Brand.Name)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Bike.Model)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.CompanyLocation.Company.Name)
-                    </td>
-                    <td>
-                        $@Html.DisplayFor(modelItem => item.Price)
-                    </td>
-                    @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
-                    {
-                        <td>
-                            @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
-                            @Html.ActionLink("Delete", "Delete", new { id = item.Id }) |
-                            @Html.ActionLink("Details", "Details", new { id = item.Id })
-                        </td>
-                    }
-                    else
-                    {
-                        <td>
-                            @Html.ActionLink("Details", "Details", new { id = item.Id })
-                        </td>
-                    }
-                </tr>
+                <div class="col-md-2">
+                    <input type="submit" value="Search" class="btn btn-default" />
+                </div>
             }
-        }
-    </tbody>
-</table>
+            else
+            {
+                <div class="col-md-2">
+                    <input value="New Search" class="btn btn-default" onClick="location.href='@Url.Action("Index")';return false;" />
+                </div>
+            }
+        </div>
+    </div>
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <br />
+
+    @*<p>From: <input type="text" id="datepickerFrom"></p>
+        <p>To:   <input type="text" id="datepickerTo"></p>*@
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.CompanyBikes.ElementAt(0).Bike.Brand)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.CompanyBikes.ElementAt(0).Bike.BikeModel)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.CompanyBikes.ElementAt(0).CompanyLocation.Company)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.CompanyBikes.ElementAt(0).Price)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.CompanyBikes.ElementAt(0).Rating)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.CompanyBikes)
+            {
+                if (item.Count > 0)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Bike.Brand.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Bike.BikeModel)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CompanyLocation.Company.Name)
+                        </td>
+                        <td>
+                            $@Html.DisplayFor(modelItem => item.Price)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Rating)
+                        </td>
+                        @if (Model.IsValid)
+                        {
+                            <td>
+                                @Html.ActionLink("Book", "Create", "Bookings", new { companyBikeId = item.Id, sDate = Model.StartDate.ToString("d/M/yyyy"), eDate = Model.EndDate.ToString("d/M/yyyy") }, null)
+                            </td>
+                        }
+                        else
+                        {
+                            <td></td>
+                        }
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+}
+
 @section Scripts {
     @Scripts.Render("~/Scripts/DataTables/jquery.dataTables.js")
     @Scripts.Render("~/Scripts/DataTables/dataTables.bootstrap.js")

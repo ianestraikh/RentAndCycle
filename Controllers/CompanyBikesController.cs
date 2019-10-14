@@ -25,7 +25,28 @@ namespace RentAndCycleCodeFirst.Controllers
         public ActionResult Index(int? id)
         {
             var companyBikes = db.CompanyBikes.Include(c => c.Bike).Include(c => c.CompanyLocation);
-            var bookings = db.Bookings.Include(c => c.CompanyBike);
+            var model = new CompanyBikeViewModel();
+            var bookings = db.Bookings.ToList();
+            foreach (var companyBike in companyBikes.ToList())
+            {
+                int count = 0;
+                int sum = 0;
+                foreach(var b in bookings)
+                {
+                    if (b.CompanyBikeId == companyBike.Id)
+                    {
+                        if (b.Feedback != null)
+                        {
+                            count += 1;
+                            sum += b.Feedback ?? 0;
+                        }
+                    }
+                }
+                if (count != 0 && sum !=0)
+                {
+                    companyBike.Rating = sum / count;
+                }
+            }
             if (id != null)
             {
                 companyBikes = companyBikes.Where(c => c.CompanyLocationId == id);
@@ -33,9 +54,43 @@ namespace RentAndCycleCodeFirst.Controllers
                 {
                     return HttpNotFound();
                 }
-                return View(companyBikes.ToList());
+                model.CompanyBikes = companyBikes.ToList();
+                return View(model);
             }
-            return View(companyBikes.ToList());
+            model.CompanyBikes = companyBikes.ToList();
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Index(CompanyBikeViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var notBookedCompanyBikes = new List<CompanyBike>();
+                var bookings = db.Bookings.Where(c => c.EndDate > DateTime.Today).ToList();
+                foreach (var companyBike in model.CompanyBikes)
+                {
+                    var isNotBooked = true;
+                    foreach (var booking in bookings)
+                    {
+                        if (companyBike.Id == booking.CompanyBikeId)
+                        {
+                            if (model.EndDate >= booking.StartDate && model.StartDate <= booking.EndDate)
+                            {
+                                isNotBooked = false;
+                            }
+                        }
+                    }
+                    if (isNotBooked)
+                    {
+                        notBookedCompanyBikes.Add(companyBike);
+                    }
+                }
+                model.CompanyBikes = notBookedCompanyBikes;
+                model.IsValid = true;
+            }
+            return View(model);
         }
 
         // GET: CompanyBikes/Details/5

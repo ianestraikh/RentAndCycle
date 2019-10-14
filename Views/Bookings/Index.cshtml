@@ -21,7 +21,7 @@
             @Html.DisplayNameFor(model => model.CompanyBike.Bike.Brand)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.CompanyBike.Bike.Model)
+            @Html.DisplayNameFor(model => model.CompanyBike.Bike.BikeModel)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.StartDate)
@@ -37,32 +37,32 @@
 
     @foreach (var item in Model)
     {
-<tr>
-    @if (item.UserId == User.Identity.GetUserId())
-    {
-        <td>
-            @Html.DisplayFor(modelItem => item.CompanyBike.CompanyLocation.Company.Name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.CompanyBike.Bike.Brand.Name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.CompanyBike.Bike.Model)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.StartDate)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.EndDate)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Feedback)
-        </td>
-        <td>
-            @Html.ActionLink("Rate", "Edit", new { id = item.Id })
-        </td>
-    }
-</tr>
+        <tr>
+            @if (item.UserId == User.Identity.GetUserId())
+            {
+                <td>
+                    @Html.DisplayFor(modelItem => item.CompanyBike.CompanyLocation.Company.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CompanyBike.Bike.Brand.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CompanyBike.Bike.BikeModel)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.StartDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EndDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Feedback)
+                </td>
+                <td>
+                    @Html.ActionLink("Rate", "Edit", new { id = item.Id })
+                </td>
+            }
+        </tr>
     }
 
 </table>
