@@ -1,0 +1,68 @@
+﻿@using Microsoft.AspNet.Identity;
+
+@model IEnumerable<RentAndCycleCodeFirst.Models.Booking>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Your bookings</h2>
+
+<p>
+    @Html.ActionLink("Book New", "Index", "CompanyBikes", null, null)
+</p>
+<table class="table">
+    <tr>
+        <th>
+            Company @Html.DisplayNameFor(model => model.CompanyBike.CompanyLocation.Company.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CompanyBike.Bike.Brand)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CompanyBike.Bike.Model)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.StartDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.EndDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Feedback)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+<tr>
+    @if (item.UserId == User.Identity.GetUserId())
+    {
+        <td>
+            @Html.DisplayFor(modelItem => item.CompanyBike.CompanyLocation.Company.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CompanyBike.Bike.Brand.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CompanyBike.Bike.Model)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.StartDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.EndDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Feedback)
+        </td>
+        <td>
+            @Html.ActionLink("Rate", "Edit", new { id = item.Id })
+        </td>
+    }
+</tr>
+    }
+
+</table>

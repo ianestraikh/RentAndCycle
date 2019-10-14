@@ -25,6 +25,7 @@ namespace RentAndCycleCodeFirst.Controllers
         public ActionResult Index(int? id)
         {
             var companyBikes = db.CompanyBikes.Include(c => c.Bike).Include(c => c.CompanyLocation);
+            var bookings = db.Bookings.Include(c => c.CompanyBike);
             if (id != null)
             {
                 companyBikes = companyBikes.Where(c => c.CompanyLocationId == id);

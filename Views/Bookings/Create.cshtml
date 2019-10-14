@@ -1,0 +1,88 @@
+﻿@model RentAndCycleCodeFirst.Models.Booking
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Make Booking</h2>
+<h4>Details</h4>
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <dl class="dl-horizontal">
+        <dt>
+            Company @Html.DisplayNameFor(model => model.CompanyBike.CompanyLocation.Company.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CompanyBike.CompanyLocation.Company.Name)
+            @Html.HiddenFor(model => model.CompanyBike.CompanyLocation.Company.Name)
+
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CompanyBike.Bike.Brand)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CompanyBike.Bike.Brand.Name)
+            @Html.HiddenFor(model => model.CompanyBike.Bike.Brand.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CompanyBike.Bike.Model)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CompanyBike.Bike.Model)
+            @Html.HiddenFor(model => model.CompanyBike.Bike.Model)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.StartDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.StartDate)
+            @Html.HiddenFor(model => model.StartDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.EndDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.EndDate)
+            @Html.HiddenFor(model => model.EndDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UserId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UserId)
+            @Html.HiddenFor(model => model.UserId)
+        </dd>
+
+        <dt>
+            Total Price
+        </dt>
+
+        <dd>
+            @ViewBag.TotalPrice
+        </dd>
+
+    </dl>
+
+
+    <div class="form-actions no-color">
+        <input type="submit" value="Book" class="btn btn-default" /> |
+        @Html.ActionLink("Back to List", "Index")
+    </div>
+}
+

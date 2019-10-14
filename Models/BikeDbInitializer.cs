@@ -8,7 +8,7 @@ using CsvHelper;
 
 namespace RentAndCycleCodeFirst.Models
 {
-    public class BikeDbInitializer : System.Data.Entity.DropCreateDatabaseAlways<BikeDbContext>
+    public class BikeDbInitializer : System.Data.Entity.DropCreateDatabaseIfModelChanges<BikeDbContext>
     {
         protected override void Seed(BikeDbContext context)
         {

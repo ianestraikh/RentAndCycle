@@ -13,6 +13,9 @@
         @Html.ActionLink("Create New", "Create")
     }
 </p>
+<p>From: <input type="text" id="datepickerFrom"></p>
+<p>To:   <input type="text" id="datepickerTo"></p>
+
 <table class="table">
     <thead>
         <tr>
@@ -71,10 +74,32 @@
 @section Scripts {
     @Scripts.Render("~/Scripts/DataTables/jquery.dataTables.js")
     @Scripts.Render("~/Scripts/DataTables/dataTables.bootstrap.js")
+    @Scripts.Render("~/Scripts/bootstrap-datepicker/js/bootstrap-datepicker.min.js")
+    @Scripts.Render("~/Scripts/bootstrap-datepicker/locales/bootstrap-datepicker.en-AU.min.js")
     <script>
         $(document).ready(function () {
             $('.table').DataTable();
+
+            // https://stackoverflow.com/a/30456709/7587466
+            $("#datepickerFrom").datepicker({
+                format: 'dd/mm/yyyy',
+                startDate: '+1d',
+                autoclose: true
+            }).on('changeDate', function (selected) {
+                var minDate = new Date(selected.date.valueOf() + (1000 * 60 * 60 * 24));
+                $('#datepickerTo').datepicker('setStartDate', minDate);
+            });
+
+            $("#datepickerTo").datepicker({
+                format: 'dd/mm/yyyy',
+                startDate: '+2d',
+                autoclose: true
+            }).on('changeDate', function (selected) {
+                var maxDate = new Date(selected.date.valueOf());
+                $('#datepickerFrom').datepicker('setEndDate', maxDate);
+            });
         });
     </script>
 }
 <link href="~/Content/DataTables/css/dataTables.bootstrap.min.css" rel="stylesheet" />
+<link href="~/Scripts/bootstrap-datepicker/css/bootstrap-datepicker.min.css" rel="stylesheet" />

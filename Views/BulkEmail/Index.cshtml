@@ -36,7 +36,7 @@
 
         <div class="form-group">
             @Html.LabelFor(model => model.Subject, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-4">
+            <div class="col-md-6">
                 @Html.EditorFor(model => model.Subject, new { htmlAttributes = new { @class = "form-control", @autocomplete="off", @style = "max-width: 100% !important" } })
                 @Html.ValidationMessageFor(model => model.Subject, "", new { @class = "text-danger" })
             </div>
@@ -44,9 +44,9 @@
 
         <div class="form-group">
             @Html.LabelFor(model => model.Contents, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-4">
+            <div class="col-md-6">
                 @Html.HiddenFor(model => model.Contents)
-                <div id="editor-container" , style="height:100px"></div>
+                <div id="editor-container"></div>
                 @Html.ValidationMessageFor(model => model.Contents, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -134,7 +134,9 @@
         var quill = new Quill('#editor-container', {
             modules: {
                 toolbar: [
-                    ['bold', 'italic'],
+                    [{ 'font': [] }],
+                    ['bold', 'italic', 'underline', 'strike'],
+                    [{ 'header': 1 }, { 'header': 2 }], 
                     ['link', 'blockquote', 'code-block'],
                     [{ list: 'ordered' }, { list: 'bullet' }]
                 ]
