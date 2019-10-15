@@ -27,6 +27,7 @@ namespace RentAndCycleCodeFirst.Controllers
             var companyBikes = db.CompanyBikes.Include(c => c.Bike).Include(c => c.CompanyLocation);
             var model = new CompanyBikeViewModel();
             var bookings = db.Bookings.ToList();
+            // set up feedback values
             foreach (var companyBike in companyBikes.ToList())
             {
                 int count = 0;

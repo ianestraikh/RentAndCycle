@@ -9,23 +9,79 @@
 </div>
 
 <div class="row">
+    <h5 style="text-align:center">The following text is obtained from the default template and has been slightly changed to fit the website topic.</h5>
     <div class="col-md-4">
-        <h2>Getting started</h2>
+        <h2>Map</h2>
         <p>
-            ASP.NET MVC gives you a powerful, patterns-based way to build dynamic websites that
+            Map gives you a powerful, patterns-based way to find dynamic routes that
             enables a clean separation of concerns and gives you full control over markup
-            for enjoyable, agile development.
+            for enjoyable, agile leisure.
         </p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301865">Learn more &raquo;</a></p>
+        <p><a class="btn btn-default" href="@Url.Action("Index", "CompanyLocations")">Search locations &raquo;</a></p>
     </div>
     <div class="col-md-4">
-        <h2>Get more libraries</h2>
-        <p>NuGet is a free Visual Studio extension that makes it easy to add, remove, and update libraries and tools in Visual Studio projects.</p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301866">Learn more &raquo;</a></p>
+        <h2>About</h2>
+        <p>
+            Rent & Cycle is a free online booking paltform that makes it easy to add,
+            remove, and update preferences and bookings in your future planning.
+        </p>
+        <p><a class="btn btn-default" href="@Url.Action("About")">Learn more &raquo;</a></p>
     </div>
     <div class="col-md-4">
-        <h2>Web Hosting</h2>
-        <p>You can easily find a web hosting company that offers the right mix of features and price for your applications.</p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>
+        <h2>Contact us</h2>
+        <p>You can easily find the company address to contact us or write us an email about how you find our services.</p>
+        <p><a class="btn btn-default" href="@Url.Action("Contact")">See contacts &raquo;</a></p>
     </div>
 </div>
+<div class="row">
+    <div class="col-md-offset-2 col-md-8" style="text-align:center">
+        <h4>Number of bikes currently booked</h4>
+        <canvas id="myChart" width="400" height="200"></canvas>
+    </div>
+</div>
+
+
+
+@section Scripts {
+    @Scripts.Render("~/Scripts/Chart.js/Chart.js")
+    <script>
+        $.ajax({
+            type: "GET",
+            url: "/Home/GetNumberOfBikes",
+            dataType: "json",
+        }).done(function (data) {
+            console.log(data);
+
+            var labelList = [];
+            const today = new Date();
+            for (var i = 0; i < 7; i++) {
+                labelList.push(today.getDate() + i + '/' + today.getMonth() + '/' + today.getFullYear())
+            }
+            console.log(labelList)
+            var ctx = $('#myChart');
+
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labelList,
+                    datasets: [{
+                        label: '# of Bikes',
+                        data: data,
+                        backgroundColor: 'rgba(51, 122, 183, 0.2)',
+                        borderColor: 'rgba(51, 122, 183, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }]
+                    }
+                }
+            });
+        });
+    </script>
+}

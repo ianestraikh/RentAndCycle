@@ -56,5 +56,30 @@ namespace RentAndCycleCodeFirst.Controllers
 
             return View();
         }
+
+        // Return a list of numbers of bikes, that are booked for a day, for a week
+        [HttpGet]
+        public ActionResult GetNumberOfBikes()
+        {
+            using (BikeDbContext db = new BikeDbContext())
+            {
+                var bookings = db.Bookings.Where(b => b.EndDate >= DateTime.Today).ToList();
+                int[] nums = new int[7];
+                for (int i = 0; i < 7; i++)
+                {
+                    var count = 0;
+                    foreach (var b in bookings)
+                    {
+                        var date = DateTime.Now.AddDays(i).Date;
+                        if (b.StartDate.Date <= date && b.EndDate.Date >= date)
+                        {
+                            count++;
+                        }
+                    }
+                    nums[i] = count;
+                }
+                return Json(nums, JsonRequestBehavior.AllowGet);
+            }
+        }
     }
 }
