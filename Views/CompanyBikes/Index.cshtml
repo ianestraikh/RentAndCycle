@@ -57,17 +57,17 @@
             </div>
 
             @Html.LabelFor(model => model.EndDate, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-3">
-            @if (!Model.IsValid)
-            {
-                @Html.EditorFor(model => model.EndDate, new { htmlAttributes = new { @class = "form-control" } })
-            }
-            else
-            {
-                @Html.EditorFor(model => model.EndDate, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
-            }
-            @Html.ValidationMessageFor(model => model.EndDate, "", new { @class = "text-danger" })
-        </div>
+            <div class="col-md-3">
+                @if (!Model.IsValid)
+                {
+                    @Html.EditorFor(model => model.EndDate, new { htmlAttributes = new { @class = "form-control" } })
+                }
+                else
+                {
+                    @Html.EditorFor(model => model.EndDate, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+                }
+                @Html.ValidationMessageFor(model => model.EndDate, "", new { @class = "text-danger" })
+            </div>
 
             @if (!Model.IsValid)
             {
@@ -131,16 +131,16 @@
                         <td>
                             @Html.DisplayFor(modelItem => item.Rating)
                         </td>
-                        @if (Model.IsValid)
-                        {
-                            <td>
+                        <td>
+                            @if (Model.IsValid)
+                            {
+
                                 @Html.ActionLink("Book", "Create", "Bookings", new { companyBikeId = item.Id, sDate = Model.StartDate.ToString("d/M/yyyy"), eDate = Model.EndDate.ToString("d/M/yyyy") }, null)
-                            </td>
-                        }
-                        else
-                        {
-                            <td></td>
-                        }
+                            } @*else if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+                            {
+                                 @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                            }*@
+                        </td>
                     </tr>
                 }
             }
