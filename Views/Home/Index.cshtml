@@ -33,55 +33,98 @@
         <p><a class="btn btn-default" href="@Url.Action("Contact")">See contacts &raquo;</a></p>
     </div>
 </div>
+
+<div style="text-align:center">
+    <h4>Number of bikes currently booked</h4>
+</div>
+
 <div class="row">
-    <div class="col-md-offset-2 col-md-8" style="text-align:center">
-        <h4>Number of bikes currently booked</h4>
+    <div class="col-md-offset-5 col-md-2" style="text-align:center">
+        <h5>Select Date</h5>
+        <div class="input-group date datepicker" data-provide="datepicker">
+            <input type="text" class="form-control" style="min-width:100%">
+            <div class="input-group-addon">
+                <span class="glyphicon glyphicon-th"></span>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-offset-2 col-md-8" style="text-align:center">     
         <canvas id="myChart" width="400" height="200"></canvas>
     </div>
 </div>
 
 
 
+
 @section Scripts {
     @Scripts.Render("~/Scripts/Chart.js/Chart.js")
+    @Scripts.Render("~/Scripts/DataTables/jquery.dataTables.js")
+    @Scripts.Render("~/Scripts/DataTables/dataTables.bootstrap.js")
+    @Scripts.Render("~/Scripts/bootstrap-datepicker/js/bootstrap-datepicker.min.js")
+    @Scripts.Render("~/Scripts/bootstrap-datepicker/locales/bootstrap-datepicker.en-AU.min.js")
     <script>
-        $.ajax({
-            type: "GET",
-            url: "/Home/GetNumberOfBikes",
-            dataType: "json",
-        }).done(function (data) {
-            console.log(data);
+        var chart;
 
-            var labelList = [];
-            const today = new Date();
-            for (var i = 0; i < 7; i++) {
-                labelList.push(today.getDate() + i + '/' + today.getMonth() + '/' + today.getFullYear())
-            }
-            console.log(labelList)
-            var ctx = $('#myChart');
+        function draw(strDate, date) {
+            $.ajax({
+                type: "GET",
+                url: "/Home/GetNumberOfBikes?dateString=" + strDate,
+                dataType: "json",
+            }).done(function (data) {
+                console.log(data);
 
-            new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: labelList,
-                    datasets: [{
-                        label: '# of Bikes',
-                        data: data,
-                        backgroundColor: 'rgba(51, 122, 183, 0.2)',
-                        borderColor: 'rgba(51, 122, 183, 1)',
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    scales: {
-                        yAxes: [{
-                            ticks: {
-                                beginAtZero: true
-                            }
-                        }]
-                    }
+                var labelList = [];
+                const today = new Date();
+                for (var i = 0; i < 7; i++) {
+                    labelList.push(date.getDate() + i + '/' + date.getMonth() + '/' + date.getFullYear())
                 }
+                console.log(labelList)
+
+                var ctx = $('#myChart');
+
+                if (typeof chart != 'undefined') {
+                    chart.destroy();
+                }
+
+                chart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: labelList,
+                        datasets: [{
+                            label: '# of Bikes',
+                            data: data,
+                            backgroundColor: 'rgba(51, 122, 183, 0.2)',
+                            borderColor: 'rgba(51, 122, 183, 1)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            yAxes: [{
+                                ticks: {
+                                    beginAtZero: true
+                                }
+                            }]
+                        }
+                    }
+                });
             });
+        }
+        const strToday = (new Date()).toLocaleDateString('en-AU');
+        draw(strToday, new Date());
+
+        // https://stackoverflow.com/a/30456709/7587466
+        $(".datepicker").datepicker({
+            format: 'dd/mm/yyyy',
+            autoclose: true
+        }).on('changeDate', function (selected) {
+            var strDate = selected.date.toLocaleDateString('en-AU');
+            draw(strDate, selected.date)
         });
     </script>
 }
+
+<link href="~/Content/DataTables/css/dataTables.bootstrap.min.css" rel="stylesheet" />
+<link href="~/Scripts/bootstrap-datepicker/css/bootstrap-datepicker.min.css" rel="stylesheet" />

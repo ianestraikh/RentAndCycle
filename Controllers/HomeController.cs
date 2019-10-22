@@ -2,6 +2,7 @@
 using RentAndCycleCodeFirst.Utils;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -59,26 +60,36 @@ namespace RentAndCycleCodeFirst.Controllers
 
         // Return a list of numbers of bikes, that are booked for a day, for a week
         [HttpGet]
-        public ActionResult GetNumberOfBikes()
+        public ActionResult GetNumberOfBikes(string dateString)
         {
-            using (BikeDbContext db = new BikeDbContext())
+            try
             {
-                var bookings = db.Bookings.Where(b => b.EndDate >= DateTime.Today).ToList();
-                int[] nums = new int[7];
-                for (int i = 0; i < 7; i++)
+                DateTime startDate = DateTime.ParseExact(dateString, "d/M/yyyy", CultureInfo.InvariantCulture);
+            
+                using (BikeDbContext db = new BikeDbContext())
                 {
-                    var count = 0;
-                    foreach (var b in bookings)
+                    var bookings = db.Bookings.Where(b => b.EndDate >= startDate.Date).ToList();
+                    int[] nums = new int[7];
+                    for (int i = 0; i < 7; i++)
                     {
-                        var date = DateTime.Now.AddDays(i).Date;
-                        if (b.StartDate.Date <= date && b.EndDate.Date >= date)
+                        var count = 0;
+                        foreach (var b in bookings)
                         {
-                            count++;
+                            var date = startDate.AddDays(i).Date;
+                            if (b.StartDate.Date <= date && b.EndDate.Date >= date)
+                            {
+                                count++;
+                            }
                         }
+                        nums[i] = count;
                     }
-                    nums[i] = count;
+                    return Json(nums, JsonRequestBehavior.AllowGet);
                 }
-                return Json(nums, JsonRequestBehavior.AllowGet);
+
+            }
+            catch (System.FormatException e)
+            {
+                return HttpNotFound();
             }
         }
     }
