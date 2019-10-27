@@ -13,19 +13,19 @@
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.Bike.Model)
+            @Html.DisplayNameFor(model => model.Bike.Brand)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Bike.Model)
+            @Html.DisplayFor(model => model.Bike.Brand.Name)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.CompanyLocation.Street)
+            @Html.DisplayNameFor(model => model.Bike.BikeModel)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.CompanyLocation.Street)
+            @Html.DisplayFor(model => model.Bike.BikeModel)
         </dd>
 
         <dt>
@@ -38,12 +38,18 @@
 
     </dl>
 
-    @using (Html.BeginForm()) {
+    @using (Html.BeginForm())
+    {
         @Html.AntiForgeryToken()
 
         <div class="form-actions no-color">
             <input type="submit" value="Delete" class="btn btn-default" /> |
             @Html.ActionLink("Back to List", "Index")
         </div>
+        <br />
+        if (@ViewBag.Result != null)
+        {
+            <div class="alert alert-info">@ViewBag.Result</div>
+        }
     }
 </div>

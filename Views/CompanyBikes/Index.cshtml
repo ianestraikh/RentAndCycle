@@ -7,16 +7,19 @@
 
 <h2>Bikes</h2>
 
-<p>
-    @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
-    {
+
+@*@if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+{
+    <p>
         @Html.ActionLink("Create New", "Create")
-    }
-</p>
+    </p>
+}*@
+
 @using (Html.BeginForm("Index", "CompanyBikes", FormMethod.Post))
 {
     @Html.AntiForgeryToken()
 
+    // serialize company bike 
     for (int i = 0; i < Model.CompanyBikes.Count; i++)
     {
         @Html.HiddenFor(m => Model.CompanyBikes[i].Id)
@@ -41,53 +44,57 @@
         @Html.HiddenFor(m => Model.CompanyBikes[i].Count)
     }
 
-    <div class="form-horizontal">
-        <div class="form-group">
-            @Html.LabelFor(model => model.StartDate, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-3">
+    // if the user is not an admin, show dates to search
+    if (!(User.Identity.IsAuthenticated && User.IsInRole("Admin")))
+    {
+        <div class="form-horizontal">
+            <div class="form-group">
+                @Html.LabelFor(model => model.StartDate, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-3">
+                    @if (!Model.IsValid)
+                    {
+                        @Html.EditorFor(model => model.StartDate, new { htmlAttributes = new { @class = "form-control" } })
+                    }
+                    else
+                    {
+                        @Html.EditorFor(model => model.StartDate, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+                    }
+                    @Html.ValidationMessageFor(model => model.StartDate, "", new { @class = "text-danger" })
+                </div>
+
+                @Html.LabelFor(model => model.EndDate, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-3">
+                    @if (!Model.IsValid)
+                    {
+                        @Html.EditorFor(model => model.EndDate, new { htmlAttributes = new { @class = "form-control" } })
+                    }
+                    else
+                    {
+                        @Html.EditorFor(model => model.EndDate, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+                    }
+                    @Html.ValidationMessageFor(model => model.EndDate, "", new { @class = "text-danger" })
+                </div>
+
                 @if (!Model.IsValid)
                 {
-                    @Html.EditorFor(model => model.StartDate, new { htmlAttributes = new { @class = "form-control" } })
+                    <div class="col-md-2">
+                        <input type="submit" value="Search" class="btn btn-default" />
+                    </div>
                 }
                 else
                 {
-                    @Html.EditorFor(model => model.StartDate, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+                    <div class="col-md-2">
+                        <input value="New Search" class="btn btn-default" onClick="location.href='@Url.Action("Index")';return false;" />
+                    </div>
                 }
-                @Html.ValidationMessageFor(model => model.StartDate, "", new { @class = "text-danger" })
-            </div>
 
-            @Html.LabelFor(model => model.EndDate, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-3">
-                @if (!Model.IsValid)
-                {
-                    @Html.EditorFor(model => model.EndDate, new { htmlAttributes = new { @class = "form-control" } })
-                }
-                else
-                {
-                    @Html.EditorFor(model => model.EndDate, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
-                }
-                @Html.ValidationMessageFor(model => model.EndDate, "", new { @class = "text-danger" })
             </div>
-
-            @if (!Model.IsValid)
-            {
-                <div class="col-md-2">
-                    <input type="submit" value="Search" class="btn btn-default" />
-                </div>
-            }
-            else
-            {
-                <div class="col-md-2">
-                    <input value="New Search" class="btn btn-default" onClick="location.href='@Url.Action("Index")';return false;" />
-                </div>
-            }
         </div>
-    </div>
-    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-    <br />
 
-    @*<p>From: <input type="text" id="datepickerFrom"></p>
-        <p>To:   <input type="text" id="datepickerTo"></p>*@
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <br />
+
+    }
 
     <table class="table">
         <thead>
@@ -132,14 +139,15 @@
                             @Html.DisplayFor(modelItem => item.Rating)
                         </td>
                         <td>
-                            @if (Model.IsValid)
+                            @*if the user is an admin, allow crud*@
+                            @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+                            {
+                                @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                            } else if (Model.IsValid)
                             {
 
                                 @Html.ActionLink("Book", "Create", "Bookings", new { companyBikeId = item.Id, sDate = Model.StartDate.ToString("d/M/yyyy"), eDate = Model.EndDate.ToString("d/M/yyyy") }, null)
-                            } @*else if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
-                            {
-                                 @Html.ActionLink("Delete", "Delete", new { id = item.Id })
-                            }*@
+                            }
                         </td>
                     </tr>
                 }
@@ -157,6 +165,7 @@
         $(document).ready(function () {
             $('.table').DataTable();
 
+            // on change of the startdate set min date for the todate
             // https://stackoverflow.com/a/30456709/7587466
             $("#datepickerFrom").datepicker({
                 format: 'dd/mm/yyyy',
@@ -167,6 +176,7 @@
                 $('#datepickerTo').datepicker('setStartDate', minDate);
             });
 
+            // on change of the todate set end date to the startdate
             $("#datepickerTo").datepicker({
                 format: 'dd/mm/yyyy',
                 startDate: '+2d',

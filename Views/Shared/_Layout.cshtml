@@ -32,8 +32,11 @@
                     <li>@Html.ActionLink("Bikes", "Index", "CompanyBikes")</li>
                     <li>@Html.ActionLink("Map", "Index", "CompanyLocations")</li>
                     <li>@Html.ActionLink("About", "About", "Home")</li>
-                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
-                    <li>@Html.ActionLink("Bookings", "Index", "Bookings")</li>
+                    @if (User.Identity.IsAuthenticated && !User.IsInRole("Admin"))
+                    {
+                        <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+                        <li>@Html.ActionLink("Bookings", "Index", "Bookings")</li>
+                    }
                     @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
                     {
                         <li>@Html.ActionLink("Bulk Email", "Index", "BulkEmail")</li>

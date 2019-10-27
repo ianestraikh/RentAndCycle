@@ -14,14 +14,6 @@ namespace RentAndCycleCodeFirst.Controllers
     {
         private BikeDbContext db = new BikeDbContext();
 
-        // GET: CompanyBikes
-        //public ActionResult Index()
-        //{
-        //    var companyBikes = db.CompanyBikes.Include(c => c.Bike).Include(c => c.CompanyLocation);
-        //    return View(companyBikes.ToList());
-        //}
-
-        // GET: CompanyBikes by CompanyLocationId
         public ActionResult Index(int? id)
         {
             var companyBikes = db.CompanyBikes.Include(c => c.Bike).Include(c => c.CompanyLocation);
@@ -45,7 +37,7 @@ namespace RentAndCycleCodeFirst.Controllers
                 }
                 if (count != 0 && sum !=0)
                 {
-                    companyBike.Rating = sum / count;
+                    companyBike.Rating = Math.Round(sum / (double) count,1);
                 }
             }
             if (id != null)
@@ -111,11 +103,17 @@ namespace RentAndCycleCodeFirst.Controllers
 
         // GET: CompanyBikes/Create
         [Authorize(Roles = "Admin")]
-        public ActionResult Create()
+        public ActionResult Create(int companyLocationId)
         {
-            ViewBag.BikeId = new SelectList(db.Bikes, "Id", "Model");
-            ViewBag.CompanyLocationId = new SelectList(db.CompanyLocations, "Id", "Street");
-            return View();
+            CompanyLocation companyLocation = db.CompanyLocations.Find(companyLocationId);
+            if (companyLocation == null)
+            {
+                return HttpNotFound();
+            }
+            ViewBag.BikeId = new SelectList(db.Bikes, "Id", "BikeModel");
+            var bike = new CompanyBike();
+            bike.CompanyLocationId = companyLocationId;
+            return View(bike);
         }
 
         // POST: CompanyBikes/Create
@@ -123,7 +121,7 @@ namespace RentAndCycleCodeFirst.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Count,BikeId,CompanyLocationId")] CompanyBike companyBike)
+        public ActionResult Create([Bind(Include = "Id,Count,Price,BikeId,CompanyLocationId")] CompanyBike companyBike)
         {
             if (ModelState.IsValid)
             {
@@ -131,9 +129,7 @@ namespace RentAndCycleCodeFirst.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-
-            ViewBag.BikeId = new SelectList(db.Bikes, "Id", "Model", companyBike.BikeId);
-            ViewBag.CompanyLocationId = new SelectList(db.CompanyLocations, "Id", "Street", companyBike.CompanyLocationId);
+            ViewBag.BikeId = new SelectList(db.Bikes, "Id", "BikeModel", companyBike.BikeId);
             return View(companyBike);
         }
 
@@ -151,7 +147,6 @@ namespace RentAndCycleCodeFirst.Controllers
                 return HttpNotFound();
             }
             ViewBag.BikeId = new SelectList(db.Bikes, "Id", "Model", companyBike.BikeId);
-            ViewBag.CompanyLocationId = new SelectList(db.CompanyLocations, "Id", "Street", companyBike.CompanyLocationId);
             return View(companyBike);
         }
 
@@ -195,6 +190,11 @@ namespace RentAndCycleCodeFirst.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
             CompanyBike companyBike = db.CompanyBikes.Find(id);
+            if (db.Bookings.Where(b => b.CompanyBikeId == id).ToList().Count > 0)
+            {
+                ViewBag.Result = "The bike is used in bookings and cannot be deleted.";
+                return View(companyBike);
+            }
             db.CompanyBikes.Remove(companyBike);
             db.SaveChanges();
             return RedirectToAction("Index");

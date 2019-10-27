@@ -27,12 +27,16 @@
                         <th style="display:none">
                             Lon
                         </th>
+                        @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+                        {
+                            <th></th>
+                        }
                     </tr>
                 </thead>
                 <tbody>
                     @foreach (var item in Model)
                     {
-                        if (item.CompanyBikes.Count > 0)
+                        if (item.CompanyBikes.Count > 0 || (User.Identity.IsAuthenticated && User.IsInRole("Admin")))
                         {
                             <tr>
                                 <td>
@@ -50,6 +54,12 @@
                                 <td style="display:none">
                                     @Html.DisplayFor(modelItem => item.Lon)
                                 </td>
+                                @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+                                {
+                                    <td>
+                                        @Html.ActionLink("Add bike", "Create", "CompanyBikes", new { companyLocationId = item.Id }, null)
+                                    </td>
+                                }
                             </tr>
                         }
                     }
